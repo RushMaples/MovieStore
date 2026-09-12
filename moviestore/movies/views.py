@@ -23,6 +23,11 @@ def show(request, id):
     return render(request, 'movies/show.html',
                   {'template_data': template_data})
 
+def report_review(request, id, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    review.delete()
+    return redirect('movies.show', id=id)
+
 @login_required
 def create_review(request, id):
     if request.method == 'POST' and request.POST['comment'] != '':
@@ -54,11 +59,6 @@ def edit_review(request, id, review_id):
         return redirect('movies.show', id=id)
     else:
         return redirect('movies.show', id=id)
-
-def report_review(request, id, review_id):
-    review = get_object_or_404(Review, id=review_id, user=request.user)
-    review.delete()
-    return redirect('movies.show', id=id)
 
 @login_required
 def delete_review(request, id, review_id):
